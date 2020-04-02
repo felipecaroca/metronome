@@ -11,8 +11,11 @@ export default new Vuex.Store({
     bpm: 500,
     currentTempo: 0,
     interval: null,
-    part:{
-      name:'',
+    song:{
+      parts: []
+    },
+    part: {
+      name: '',
       lines: []
     },
     compass: {
@@ -45,15 +48,42 @@ export default new Vuex.Store({
       }
     },
     addLine(state, notes) {
-      state.part.lines.push(notes)
+      let newLine = []
+      for (let note in notes) {
+        newLine.push(notes[note])
+      }
+      state.part.lines.push(newLine)
+    },
+    removeChord(state, note, arrayIndex) {
+      console.log(note)
+      console.log(arrayIndex)
+      // for (let line in state.part.lines) {
+      //
+      //   state.part.lines[line] = state.part.lines[line].filter(a => a !== note)
+      // }
+    },
+    addPart(state){
+      state.song.parts.push(state.part)
+    },
+    resetPart(state){
+      state.part = {
+        name: '',
+        lines: []
+      }
     }
   },
   getters: {
+    getPart(state) {
+      return state.part
+    },
     getCompass(state) {
       return state.compass
     },
     getRunning(state) {
       return state.running
+    },
+    getPartLines(state) {
+      return state.part.lines
     }
   },
   actions: {},

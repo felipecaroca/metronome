@@ -8,7 +8,7 @@
       {{note.name}}
       <v-btn color="error"
              x-small
-             @click="removeChord(note)"
+             @click="removeChord(note, notes)"
       >X
       </v-btn>
     </v-card>
@@ -20,13 +20,9 @@
     name: "LineView",
     props:['notes'],
     methods:{
-      removeChord(note) {
-        this.notes = this.notes.filter(a => a !== note)
+      removeChord(note, arrayIndex) {
+        this.$emit('removeChord', note, arrayIndex)
       }
     }
   }
 </script>
-
-<style scoped>
-
-</style>

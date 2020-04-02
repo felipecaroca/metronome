@@ -20,6 +20,10 @@
                @click="stopSequence"
                :disabled="!isRunning"
         >Detener</v-btn>
+        <pre>
+            {{part}}
+        </pre>
+
       </v-col>
     </v-row>
   </v-container>
@@ -41,6 +45,9 @@
     computed: {
       isRunning(){
         return this.$store.getters.getRunning
+      },
+      part(){
+        return this.$store.getters.getPart
       }
     }
 

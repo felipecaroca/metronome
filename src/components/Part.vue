@@ -7,7 +7,8 @@
 
       <part-line-form />
       <v-btn color="primary"
-      >+ Agregar Línea
+             @click="addPart"
+      >+ Guardar Parte
       </v-btn>
     </v-col>
   </v-row>
@@ -21,13 +22,9 @@
       lines: []
     }),
     methods: {
-      addLine(){
-
+      addPart(){
+        this.$store.commit('addPart')
       }
     }
   }
 </script>
-
-<style scoped>
-
-</style>
