@@ -3,27 +3,30 @@
     <v-row>
       <v-col cols="2">
         <compass/>
+        <v-row class="text-center">
+          <v-col cols="6" class="text-right">
+            <v-btn color="success"
+                   @click="playSequence"
+                   :disabled="isRunning"
+                   fab
+            >
+              <v-icon>mdi-play</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col cols="6">
+            <v-btn color="info"
+                   @click="stopSequence"
+                   :disabled="!isRunning"
+                   fab
+            >
+              <v-icon>mdi-pause</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-col>
       <v-col cols="10">
-        <part />
-      </v-col>
-    </v-row>
-    <v-row class="text-center">
-      <v-col cols="3" class="text-right">
-        <v-btn color="success"
-               @click="playSequence"
-               :disabled="isRunning"
-        >Iniciar</v-btn>
-      </v-col>
-      <v-col cols="3">
-        <v-btn color="error"
-               @click="stopSequence"
-               :disabled="!isRunning"
-        >Detener</v-btn>
-        <pre>
-            {{part}}
-        </pre>
-
+        <song-form />
+        <song-part-view />
       </v-col>
     </v-row>
   </v-container>
@@ -32,22 +35,20 @@
 <script>
 
   export default {
-    name: 'HelloWorld',
-
     methods: {
-      playSequence(){
+      playSequence() {
         this.$store.commit('init')
       },
-      stopSequence(){
+      stopSequence() {
         this.$store.commit('finish')
       }
     },
     computed: {
-      isRunning(){
+      isRunning() {
         return this.$store.getters.getRunning
       },
-      part(){
-        return this.$store.getters.getPart
+      song() {
+        return this.$store.getters.getSong
       }
     }
 

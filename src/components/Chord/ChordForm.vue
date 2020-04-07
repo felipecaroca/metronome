@@ -1,21 +1,15 @@
 <template>
   <div>
-    <v-card class="pa-3">
-      <part-line-view :notes="storedNotes" v-for="storedNotes in storedLines"
-                      @removeChord="removeStoredChord"
-                      :key="storedNotes.$id"/>
-    </v-card>
-    <v-card
-        class="d-flex flex-row mb-3"
-        flat
-        tile
-    >
-
-      <v-card class="pa-3">
+    <v-row>
+      <v-col>
         <v-autocomplete :items="musicalNotes"
                         label="Acorde"
                         v-model="note.name"/>
+      </v-col>
+      <v-col>
         <v-text-field v-model="note.duration" label="Duración del Acorde"/>
+      </v-col>
+      <v-col>
         <v-btn fab
                small
                @click="addChord"
@@ -31,11 +25,25 @@
         >
           <v-icon>mdi-floppy</v-icon>
         </v-btn>
-      </v-card>
-      <part-line-view :notes="notes" @removeChord="removeChord"/>
-    </v-card>
-  </div>
+      </v-col>
+      <v-col>
+        <part-line-view :notes="storedNotes" v-for="storedNotes in storedLines"
+                        @removeChord="removeStoredChord"
+                        :key="storedNotes.$id"
+                        :deletable="true"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <part-line-view :notes="notes"
+                        @removeChord="removeChord"
+                        :deletable="true"
+        />
 
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -64,15 +72,16 @@
           alert('agregue los datos del formulario')
         }
       },
-      removeChord(note){
-        this.notes = this.notes.filter(a=>a !== note)
-      },
-      removeStoredChord(note, arrayIndex){
-        this.$store.commit('removeChord', note, arrayIndex)
+      removeStoredChord(data) {
+        this.$store.commit('removeChord', data)
         this.$forceUpdate()
       },
       saveLine() {
         this.$store.commit('addLine', this.notes)
+        this.notes = []
+      },
+      removeChord(data) {
+        this.notes = this.notes.filter(a => a !== data.note)
       }
     },
     computed: {

@@ -35,8 +35,32 @@ export default new Vuex.Store({
       state.bpm = 60000 / state.compass.velocity
       state.interval = setInterval(() => {
         state.compass.processCurrent(state.compass)
+        state.bpmCounter += 1
+        console.log(state.bpmCounter, state.bpmTotal)
+        if (state.bpmCounter  === state.bpmTotal){
+          clearInterval(state.interval)
+          state.running = false
+        }
+
       }, state.bpm)
       state.running = true
+    },
+    calculateBpm(state){
+      let durations = []
+      let totalDurations = 0
+      state.song.parts.forEach(part=>{
+        part.lines.forEach(line=>{
+          line.forEach((note) => {
+            if (!isNaN(note.duration))
+              note.from = totalDurations + 1
+              totalDurations += parseFloat(note.duration)
+              note.to = totalDurations
+              durations.push(parseFloat(note.duration))
+          })
+        })
+      })
+      state.bpmTotal  = totalDurations
+      console.log(durations)
     },
     finish(state) {
       clearInterval(state.interval)
@@ -54,16 +78,22 @@ export default new Vuex.Store({
       }
       state.part.lines.push(newLine)
     },
-    removeChord(state, note, arrayIndex) {
-      console.log(note)
-      console.log(arrayIndex)
-      // for (let line in state.part.lines) {
-      //
-      //   state.part.lines[line] = state.part.lines[line].filter(a => a !== note)
-      // }
+    removeChord(state,data) {
+      for (let line in state.part.lines) {
+        if (data.arrayIndex === state.part.lines[line])
+          state.part.lines[line] = state.part.lines[line].filter(a => a !== data.note)
+      }
     },
-    addPart(state){
-      state.song.parts.push(state.part)
+    addPart(state, partName){
+      let newPart = {
+        name: partName,
+        lines: state.part.lines
+      }
+      if (newPart.lines && newPart.lines.length > 0)
+        state.song.parts.push(newPart)
+      else
+        alert('la parte no tiene acordes')
+
     },
     resetPart(state){
       state.part = {
@@ -84,6 +114,9 @@ export default new Vuex.Store({
     },
     getPartLines(state) {
       return state.part.lines
+    },
+    getSong(state){
+      return state.song
     }
   },
   actions: {},

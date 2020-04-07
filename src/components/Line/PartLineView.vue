@@ -9,6 +9,7 @@
       <v-btn color="error"
              x-small
              @click="removeChord(note, notes)"
+             v-if="deletable"
       >X
       </v-btn>
     </v-card>
@@ -18,10 +19,10 @@
 <script>
   export default {
     name: "LineView",
-    props:['notes'],
+    props:['notes', 'deletable'],
     methods:{
       removeChord(note, arrayIndex) {
-        this.$emit('removeChord', note, arrayIndex)
+        this.$emit('removeChord', {note, arrayIndex})
       }
     }
   }
