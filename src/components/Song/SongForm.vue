@@ -37,7 +37,7 @@
 
           <v-card>
             <v-toolbar dark color="primary">
-              <v-btn icon dark @click="dialog = false">
+              <v-btn icon dark @click="closeDialog">
                 <v-icon>mdi-close</v-icon>
               </v-btn>
               <v-toolbar-title>Parte de la Canción</v-toolbar-title>
@@ -66,6 +66,10 @@
       },
       saveSong(){
         this.$store.commit('calculateBpm')
+      },
+      closeDialog(){
+        this.dialog = false
+        this.saveSong()
       }
     }
   }

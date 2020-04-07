@@ -4,7 +4,7 @@
       flat
       tile
   >
-    <v-card v-for="note in notes" :key="note.$id" class="pa-3">
+    <v-card v-for="note in notes" :key="note.$id" class="pa-3 ma-1" :dark="checkActive(note)" :color="checkColor(note)">
       {{note.name}}
       <v-btn color="error"
              x-small
@@ -23,6 +23,17 @@
     methods:{
       removeChord(note, arrayIndex) {
         this.$emit('removeChord', {note, arrayIndex})
+      },
+      checkActive(note){
+        return this.bpmCounter >= note.from && this.bpmCounter <= note.to
+      },
+      checkColor(note){
+        return this.checkActive(note) ? 'success' : ''
+      }
+    },
+    computed:{
+      bpmCounter(){
+        return this.$store.getters.getBpmCounter
       }
     }
   }

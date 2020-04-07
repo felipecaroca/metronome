@@ -4,7 +4,7 @@
       <v-col cols="2">
         <compass/>
         <v-row class="text-center">
-          <v-col cols="6" class="text-right">
+          <v-col cols="4" class="text-right">
             <v-btn color="success"
                    @click="playSequence"
                    :disabled="isRunning"
@@ -13,13 +13,22 @@
               <v-icon>mdi-play</v-icon>
             </v-btn>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="4">
             <v-btn color="info"
-                   @click="stopSequence"
+                   @click="pauseSequence"
                    :disabled="!isRunning"
                    fab
             >
               <v-icon>mdi-pause</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col cols="4">
+            <v-btn color="error"
+                   @click="stopSequence"
+                   :disabled="!isRunning"
+                   fab
+            >
+              <v-icon>mdi-stop</v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -38,6 +47,9 @@
     methods: {
       playSequence() {
         this.$store.commit('init')
+      },
+      pauseSequence(){
+        this.$store.commit('pause')
       },
       stopSequence() {
         this.$store.commit('finish')

@@ -48,6 +48,7 @@
 
 <script>
   import {notes} from "../../imports/musialNotes";
+  import {Chord} from "../../models/Chord";
 
   export default {
     data: () => ({
@@ -64,12 +65,9 @@
     methods: {
       addChord() {
         if (this.note.isValid(this.note)) {
-          this.notes.push({
-            'name': this.note.name,
-            'duration': this.note.duration
-          })
+          this.notes.push(Chord.createChord(this.note))
         } else {
-          alert('agregue los datos del formulario')
+          this.$store.commit('openSnackBar', 'agregue los datos del formulario')
         }
       },
       removeStoredChord(data) {
@@ -77,8 +75,11 @@
         this.$forceUpdate()
       },
       saveLine() {
-        this.$store.commit('addLine', this.notes)
-        this.notes = []
+        if (this.notes && this.notes.length > 0) {
+          this.$store.commit('addLine', this.notes)
+          this.notes = []
+        } else
+          this.$store.commit('openSnackBar', 'la linea no tiene acordes')
       },
       removeChord(data) {
         this.notes = this.notes.filter(a => a !== data.note)

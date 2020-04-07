@@ -35,10 +35,17 @@
     }),
     methods: {
       addPart() {
-        if (this.name)
+        if (this.partLines && this.partLines.length > 0 && this.name)
           this.$store.commit('addPart', this.name)
+        else if (!this.name)
+          this.$store.commit('openSnackBar', 'debe agregar el nombre')
         else
-          alert('debe agregar el nombre')
+          this.$store.commit('openSnackBar', 'la parte no tiene acordes')
+      }
+    },
+    computed:{
+      partLines(){
+        return this.$store.getters.getPartLines
       }
     }
   }

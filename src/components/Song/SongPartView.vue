@@ -35,12 +35,39 @@
     data: () => ({
       tab: null
     }),
+    watch:{
+      activeTab:function(){
+        if (this.tab !== this.activeTab){
+          console.log(this.tab, this.activeTab)
+          this.tab = this.activeTab
+        }
+
+      }
+    },
     methods: {
+
 
     },
     computed: {
       song(){
         return this.$store.getters.getSong
+      },
+      bpmCounter(){
+        return this.$store.getters.getBpmCounter
+      },
+      parts(){
+        this.song.parts.forEach(part=>{
+          part.active = this.bpmCounter >= part.from && this.bpmCounter <= part.to
+        })
+        return this.song.parts
+      },
+      activeTab(){
+        let tmp = 0
+        this.parts.forEach((part, index)=>{
+          if (part.active)
+            tmp = index
+        })
+        return tmp
       }
     }
   }

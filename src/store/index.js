@@ -1,16 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import {Line} from '../models/Line'
+import {Compass} from "../models/Compass";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    dark: false,
     running: false,
     bpmCounter: 0,
     bpmTotal: 0,
     bpm: 500,
-    currentTempo: 0,
     interval: null,
+    snackbarTime: null,
+    snackbar:{
+      visible: false,
+      message: ''
+    },
     song:{
       parts: []
     },
@@ -32,23 +39,13 @@ export default new Vuex.Store({
   },
   mutations: {
     init(state) {
-      state.bpm = 60000 / state.compass.velocity
-      state.interval = setInterval(() => {
-        state.compass.processCurrent(state.compass)
-        state.bpmCounter += 1
-        console.log(state.bpmCounter, state.bpmTotal)
-        if (state.bpmCounter  === state.bpmTotal){
-          clearInterval(state.interval)
-          state.running = false
-        }
-
-      }, state.bpm)
-      state.running = true
+     Compass.init(state)
     },
     calculateBpm(state){
       let durations = []
       let totalDurations = 0
       state.song.parts.forEach(part=>{
+        part.from = totalDurations + 1
         part.lines.forEach(line=>{
           line.forEach((note) => {
             if (!isNaN(note.duration))
@@ -57,14 +54,16 @@ export default new Vuex.Store({
               note.to = totalDurations
               durations.push(parseFloat(note.duration))
           })
+          part.to = totalDurations
         })
       })
       state.bpmTotal  = totalDurations
-      console.log(durations)
     },
-    finish(state) {
-      clearInterval(state.interval)
-      state.running = false
+    pause(state) {
+     Compass.pause(state)
+    },
+    finish(state){
+     Compass.finish(state)
     },
     setCompass(state, compass) {
       for (let prop in compass) {
@@ -72,10 +71,7 @@ export default new Vuex.Store({
       }
     },
     addLine(state, notes) {
-      let newLine = []
-      for (let note in notes) {
-        newLine.push(notes[note])
-      }
+      let newLine = Line.createLine(notes)
       state.part.lines.push(newLine)
     },
     removeChord(state,data) {
@@ -85,21 +81,35 @@ export default new Vuex.Store({
       }
     },
     addPart(state, partName){
+      let lines = []
+      state.part.lines.forEach(line=>{
+        let newLine = Line.createLine(line)
+        lines.push(newLine)
+      })
       let newPart = {
         name: partName,
-        lines: state.part.lines
+        lines: lines
       }
       if (newPart.lines && newPart.lines.length > 0)
         state.song.parts.push(newPart)
-      else
-        alert('la parte no tiene acordes')
-
     },
     resetPart(state){
       state.part = {
         name: '',
         lines: []
       }
+    },
+    closeSnackBar(state){
+      state.snackbar.visible = false
+      state.snackbar.message = ''
+    },
+    openSnackBar(state, message){
+      clearTimeout(state.snackbarTime)
+      state.snackbar.visible = true
+      state.snackbar.message = message
+      state.snackbarTime = setTimeout(()=>{
+        state.snackbar.visible = false
+      }, 5000)
     }
   },
   getters: {
@@ -117,6 +127,15 @@ export default new Vuex.Store({
     },
     getSong(state){
       return state.song
+    },
+    getBpmCounter(state){
+      return state.bpmCounter
+    },
+    getDark(state){
+      return state.dark
+    },
+    getSnackBar(state){
+      return state.snackbar
     }
   },
   actions: {},

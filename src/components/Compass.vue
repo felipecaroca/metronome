@@ -32,7 +32,6 @@
 
 <script>
   export default {
-    name: "Compass",
     data: () => ({
       tempo: 4,
       velocity: 120
@@ -61,7 +60,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>
