@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Privacy from '../views/policy/privacy'
+import Service from '../views/policy/service'
 
 Vue.use(VueRouter)
 
@@ -9,6 +11,16 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: Privacy
+  },
+  {
+    path: '/service',
+    name: 'service',
+    component: Service
   },
   {
     path: '/about',
