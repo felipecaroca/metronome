@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {Line} from '../models/Line'
+import firebase from "firebase/app";
 import {Compass} from "../models/Compass";
 
 Vue.use(Vuex)
@@ -136,6 +137,12 @@ export default new Vuex.Store({
     },
     getSnackBar(state){
       return state.snackbar
+    },
+    getUser:(state)=>{
+      firebase.auth().onAuthStateChanged(function(user){
+        state.user = user
+      })
+      return state.user
     }
   },
   actions: {},
