@@ -20,16 +20,16 @@
     </router-link>
 
     <v-spacer/>
-
+    {{user.displayName}}
     <v-btn
         to="/login"
         color="primary"
-        v-if="user"
+        v-if="!user.displayName"
     >
       <span class="mr-2">Iniciar Sesión</span>
       <v-icon>mdi-login</v-icon>
     </v-btn>
-    <v-menu bottom left>
+    <v-menu bottom left v-else>
       <template v-slot:activator="{ on }">
         <v-btn
             dark
@@ -61,7 +61,8 @@
     }),
     methods:{
       logout(){
-
+        this.$store.commit('logout')
+        this.$forceUpdate()
       }
     },
     computed:{

@@ -2,12 +2,14 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {Line} from '../models/Line'
 import firebase from "firebase/app";
+import router from "../router";
 import {Compass} from "../models/Compass";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    user: {},
     dark: false,
     running: false,
     bpmCounter: 0,
@@ -111,6 +113,12 @@ export default new Vuex.Store({
       state.snackbarTime = setTimeout(()=>{
         state.snackbar.visible = false
       }, 5000)
+    },
+    logout(state){
+      firebase.auth().signOut().then(()=> {
+        state.user = {}
+        router.push('/')
+      })
     }
   },
   getters: {
