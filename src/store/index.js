@@ -9,6 +9,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    isLoading: false,
     user: {},
     dark: false,
     running: false,
@@ -17,11 +18,12 @@ export default new Vuex.Store({
     bpm: 500,
     interval: null,
     snackbarTime: null,
-    snackbar:{
+    snackbar: {
       visible: false,
-      message: ''
+      message: '',
+      color: 'default'
     },
-    song:{
+    song: {
       parts: []
     },
     part: {
@@ -41,32 +43,35 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    init(state) {
-     Compass.init(state)
+    setLoading(state, loading){
+      state.isLoading = loading
     },
-    calculateBpm(state){
+    init(state) {
+      Compass.init(state)
+    },
+    calculateBpm(state) {
       let durations = []
       let totalDurations = 0
-      state.song.parts.forEach(part=>{
+      state.song.parts.forEach(part => {
         part.from = totalDurations + 1
-        part.lines.forEach(line=>{
+        part.lines.forEach(line => {
           line.forEach((note) => {
             if (!isNaN(note.duration))
               note.from = totalDurations + 1
-              totalDurations += parseFloat(note.duration)
-              note.to = totalDurations
-              durations.push(parseFloat(note.duration))
+            totalDurations += parseFloat(note.duration)
+            note.to = totalDurations
+            durations.push(parseFloat(note.duration))
           })
           part.to = totalDurations
         })
       })
-      state.bpmTotal  = totalDurations
+      state.bpmTotal = totalDurations
     },
     pause(state) {
-     Compass.pause(state)
+      Compass.pause(state)
     },
-    finish(state){
-     Compass.finish(state)
+    finish(state) {
+      Compass.finish(state)
     },
     setCompass(state, compass) {
       for (let prop in compass) {
@@ -77,15 +82,15 @@ export default new Vuex.Store({
       let newLine = Line.createLine(notes)
       state.part.lines.push(newLine)
     },
-    removeChord(state,data) {
+    removeChord(state, data) {
       for (let line in state.part.lines) {
         if (data.arrayIndex === state.part.lines[line])
           state.part.lines[line] = state.part.lines[line].filter(a => a !== data.note)
       }
     },
-    addPart(state, partName){
+    addPart(state, partName) {
       let lines = []
-      state.part.lines.forEach(line=>{
+      state.part.lines.forEach(line => {
         let newLine = Line.createLine(line)
         lines.push(newLine)
       })
@@ -96,29 +101,51 @@ export default new Vuex.Store({
       if (newPart.lines && newPart.lines.length > 0)
         state.song.parts.push(newPart)
     },
-    resetPart(state){
+    resetPart(state) {
       state.part = {
         name: '',
         lines: []
       }
     },
-    closeSnackBar(state){
+    closeSnackBar(state) {
       state.snackbar.visible = false
       state.snackbar.message = ''
     },
-    openSnackBar(state, message){
+    openSnackBar(state, data) {
       clearTimeout(state.snackbarTime)
       state.snackbar.visible = true
-      state.snackbar.message = message
-      state.snackbarTime = setTimeout(()=>{
+      state.snackbar.message = data.message
+      if (data.color)
+        state.snackbar.color = data.color
+      state.snackbarTime = setTimeout(() => {
         state.snackbar.visible = false
       }, 5000)
     },
-    logout(state){
-      firebase.auth().signOut().then(()=> {
+    addSongName(state, songName) {
+      state.song.name = songName
+    },
+    logout(state) {
+      firebase.auth().signOut().then(() => {
         state.user = {}
         router.push('/')
       })
+    },
+    saveSong(state) {
+      state.isLoading = true
+      let song = firebase.functions().httpsCallable('song')
+      state.song.compass = state.compass
+      song(state.song).then((res)=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log('error', err.details)
+        clearTimeout(state.snackbarTime)
+        state.snackbar.visible = true
+        state.snackbar.message = err.message
+        state.snackbar.color = 'error'
+        state.snackbarTime = setTimeout(() => {
+          state.snackbar.visible = false
+        }, 5000)
+      }).finally(()=> state.isLoading = false)
     }
   },
   getters: {
@@ -134,23 +161,27 @@ export default new Vuex.Store({
     getPartLines(state) {
       return state.part.lines
     },
-    getSong(state){
+    getSong(state) {
       return state.song
     },
-    getBpmCounter(state){
+    getBpmCounter(state) {
       return state.bpmCounter
     },
-    getDark(state){
+    getDark(state) {
       return state.dark
     },
-    getSnackBar(state){
+    getSnackBar(state) {
       return state.snackbar
     },
-    getUser:(state)=>{
-      firebase.auth().onAuthStateChanged(function(user){
-        state.user = user
+    getUser: (state) => {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user)
+          state.user = user
       })
       return state.user
+    },
+    getLoading(state){
+      return state.isLoading
     }
   },
   actions: {},

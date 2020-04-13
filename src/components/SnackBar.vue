@@ -1,11 +1,11 @@
 <template>
   <div class="text-center ma-2">
     <v-snackbar
+        :color="snackbar.color"
         v-model="snackbar.visible"
     >
       {{ snackbar.message }}
       <v-btn
-          color="pink"
           text
           @click="closeSnackBar"
       >

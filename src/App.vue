@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <loading-dialog />
     <snackbar/>
     <app-bar />
     <v-content>

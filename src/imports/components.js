@@ -12,3 +12,4 @@ Vue.component('song-part-name-view', require('../components/Song/SongPartNameVie
 Vue.component('snackbar', require('../components/SnackBar').default)
 Vue.component('footer-view', require('../components/footer').default)
 Vue.component('app-bar', require('../components/Html/Appbar').default)
+Vue.component('loading-dialog', require('../components/Html/LoadingDialog').default)

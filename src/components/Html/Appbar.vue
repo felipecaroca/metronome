@@ -20,7 +20,15 @@
     </router-link>
 
     <v-spacer/>
-    {{user.displayName}}
+    <v-list class="transparent" v-if="user">
+      <v-list-item>
+        <v-list-item-avatar>
+          <v-img :src="user.photoURL"/>
+        </v-list-item-avatar>
+        {{user.displayName}}
+      </v-list-item>
+    </v-list>
+
     <v-btn
         to="/login"
         color="primary"
@@ -59,14 +67,14 @@
     data: () => ({
       logo
     }),
-    methods:{
-      logout(){
+    methods: {
+      logout() {
         this.$store.commit('logout')
         this.$forceUpdate()
       }
     },
-    computed:{
-      user(){
+    computed: {
+      user() {
         return this.$store.getters.getUser
       }
     }
