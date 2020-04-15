@@ -18,7 +18,13 @@
 
       </div>
     </router-link>
-
+    <v-btn class="elevation-0 transparent" to="/">
+      <v-icon>mdi-home</v-icon>
+    </v-btn>
+    <v-btn  v-if="songs.length > 0" to="/songs" class="transparent elevation-0"  tile >
+      Mis Canciones
+      <v-icon>mdi-music</v-icon>
+    </v-btn>
     <v-spacer/>
     <v-list class="transparent" v-if="user">
       <v-list-item>
@@ -62,11 +68,33 @@
 
 <script>
   import logo from "../../assets/logo.png";
+  import firebase from "firebase/app";
 
   export default {
     data: () => ({
       logo
     }),
+    created() {
+      let self = this
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user){
+
+          let songs = firebase.firestore().collection('users')
+            .doc(user.uid).collection('songs')
+          songs.onSnapshot(snapshot => {
+            console.log('songs')
+            let songsList = []
+            snapshot.docs.forEach(doc => {
+              songsList.push(doc.data())
+            })
+            self.$store.commit('setSongs', songsList)
+          }, error => {
+            console.log(error)
+          })
+        }
+
+      })
+    },
     methods: {
       logout() {
         this.$store.commit('logout')
@@ -76,6 +104,9 @@
     computed: {
       user() {
         return this.$store.getters.getUser
+      },
+      songs() {
+        return this.$store.getters.getSongs
       }
     }
   }

@@ -23,6 +23,7 @@ export default new Vuex.Store({
       message: '',
       color: 'default'
     },
+    songs:[],
     song: {
       parts: []
     },
@@ -130,6 +131,16 @@ export default new Vuex.Store({
         router.push('/')
       })
     },
+    setSongs(state, songs){
+      state.songs = songs
+    },
+    setSong(state, song){
+      state.compass.velocity = song.compass.velocity
+      state.compass.tempo = song.compass.tempo
+      state.compass.current = 0
+      state.song = song
+      console.log(song)
+    },
     saveSong(state) {
       state.isLoading = true
       let song = firebase.functions().httpsCallable('song')
@@ -182,6 +193,9 @@ export default new Vuex.Store({
     },
     getLoading(state){
       return state.isLoading
+    },
+    getSongs(state){
+     return state.songs
     }
   },
   actions: {},

@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Privacy from '../views/policy/privacy'
 import Service from '../views/policy/service'
 import Login from "../views/Login";
+import Songs from "../views/Songs";
 
 Vue.use(VueRouter)
 
@@ -29,12 +30,9 @@ const routes = [
     component: Service
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/songs',
+    name: 'songs',
+    component: Songs
   }
 ]
 
