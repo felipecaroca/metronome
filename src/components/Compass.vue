@@ -34,9 +34,22 @@
   export default {
     data: () => ({
       tempo: 4,
-      velocity: 120
+      velocity: 120,
+      storedTempo: null,
+      storedVelocity: null
     }),
+    created() {
+      this.storedTempo = this.currentCompassTempo
+      this.storedVelocity = this.currentCompassVelocity
+    },
     watch: {
+      storedTempo: function () {
+        this.tempo = this.currentCompassTempo
+
+      },
+      storedVelocity: function(){
+        this.velocity = this.currentCompassVelocity
+      },
       tempo: function (val) {
         this.$store.commit('setCompass', {
           tempo: parseInt(val),
@@ -56,6 +69,15 @@
       },
       isRunning() {
         return this.$store.getters.getRunning
+      },
+      currentCompass() {
+        return this.$store.getters.getCurrentCompass
+      },
+      currentCompassTempo(){
+        return this.currentCompass.tempo
+      },
+      currentCompassVelocity(){
+        return this.currentCompass.velocity
       }
     }
   }

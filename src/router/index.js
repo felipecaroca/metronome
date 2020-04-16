@@ -5,6 +5,7 @@ import Privacy from '../views/policy/privacy'
 import Service from '../views/policy/service'
 import Login from "../views/Login";
 import Songs from "../views/Songs";
+import Player from '../components/SongPlayer'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/songs',
     name: 'songs',
     component: Songs
+  },
+  {
+    path: '/player',
+    name: 'player',
+    component: Player
   }
 ]
 

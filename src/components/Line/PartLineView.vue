@@ -4,13 +4,15 @@
       flat
       tile
   >
-    <v-card v-for="note in notes" :key="note.$id" class="pa-3 ma-1" :dark="checkActive(note)" :color="checkColor(note)">
+
+    <v-card v-for="note in notes.chords" :key="note.$id" class="pa-3 ma-1" :dark="checkActive(note)" :color="checkColor(note)">
       {{note.name}}
       <v-btn color="error"
              x-small
              @click="removeChord(note, notes)"
              v-if="deletable"
-      >X
+      >
+        X
       </v-btn>
     </v-card>
   </v-card>

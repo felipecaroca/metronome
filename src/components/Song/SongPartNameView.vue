@@ -8,10 +8,8 @@
 
 <script>
   export default {
+    props:['song'],
     computed:{
-      song(){
-        return this.$store.getters.getSong
-      },
       items(){
         let tmp = []
         for (let part in this.song.parts){

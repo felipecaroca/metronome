@@ -1,30 +1,34 @@
 class Compass {
-  static init(state){
-    state.bpm = 60000 / state.compass.velocity
-    state.interval = setInterval(() => {
-      state.compass.processCurrent(state.compass)
-      state.bpmCounter += 1
-      if (state.bpmCounter  === state.bpmTotal){
-        clearInterval(state.interval)
-        state.running = false
-        state.bpmCounter = 0
-        state.compass.current = 0
-      }
-      state.dark = !state.dark
-    }, state.bpm)
-    state.running = true
+  constructor() {
+    this.tempo = 4
+    this.velocity = 120
   }
-
-  static pause(state){
-    clearInterval(state.interval)
-    state.running = false
-  }
-  static finish(state){
-    clearInterval(state.interval)
-    state.running = false
-    state.bpmCounter = 0
-    state.compass.current = 0
-  }
+  // static init(song) {
+  //   song.bpm = 60000 / song.compass.velocity
+  //   song.interval = setInterval(() => {
+  //     song.compass.processCurrent(song.compass)
+  //     song.bpmCounter += 1
+  //     if (song.bpmCounter === song.bpmTotal) {
+  //       clearInterval(song.interval)
+  //       song.running = false
+  //       song.bpmCounter = 0
+  //       song.compass.current = 0
+  //     }
+  //   }, song.bpm)
+  //   song.running = true
+  // }
+  //
+  // static pause(song) {
+  //   clearInterval(song.interval)
+  //   song.running = false
+  // }
+  //
+  // static finish(song) {
+  //   clearInterval(song.interval)
+  //   song.running = false
+  //   song.bpmCounter = 0
+  //   song.compass.current = 0
+  // }
 }
 
 export {Compass}

@@ -46,7 +46,8 @@
 
     <v-row>
       <v-col>
-        <part-line-view :notes="notes"
+
+        <part-line-view :notes="line"
                         @removeChord="removeChord"
                         :deletable="true"
         />
@@ -59,8 +60,10 @@
 <script>
   import {notes} from "../../imports/musialNotes";
   import {Chord} from "../../models/Chord";
+  import {Line} from "../../models/Line";
 
   export default {
+    props:['part'],
     data: () => ({
       musicalNotes: notes,
       chordValid: false,
@@ -83,7 +86,8 @@
       addChord() {
         if (this.$refs.chordForm.validate()) {
           if (this.note.isValid(this.note)) {
-            this.notes.push(Chord.createChord(this.note))
+            this.notes.push(new Chord(this.note.name, this.note.duration))
+
           } else {
             this.$store.commit('openSnackBar', {
               message: 'agregue los datos del formulario',
@@ -93,12 +97,16 @@
         }
       },
       removeStoredChord(data) {
-        this.$store.commit('removeChord', data)
-        this.$forceUpdate()
+        this.part.lines.forEach(line=>{
+          if (line.__ob__.dep.id === data.arrayIndex.__ob__.dep.id){
+            line.chords = line.chords.filter(a=> a !== data.note)
+          }
+        })
+        this.part.lines = this.part.lines.filter(a=>a.chords.length > 0)
       },
       saveLine() {
         if (this.notes && this.notes.length > 0) {
-          this.$store.commit('addLine', this.notes)
+          this.part.lines.push(new Line(this.notes))
           this.notes = []
         } else
           this.$store.commit('openSnackBar', {
@@ -112,7 +120,12 @@
     },
     computed: {
       storedLines() {
-        return this.$store.getters.getPartLines
+        return this.part.lines
+      },
+      line(){
+        return {
+          chords: this.notes
+        }
       }
     }
   }

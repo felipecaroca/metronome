@@ -3,9 +3,8 @@
     <v-form v-model="songValid"  ref="songForm" @submit.prevent="saveSong">
       <v-row>
         <v-col>
-          <v-text-field v-model="songName"
+          <v-text-field v-model="song.name"
                         label="Nombre de la Canción"
-                        @change="addSongName"
                         required
                         :rules="nameRules"
           />
@@ -48,7 +47,7 @@
               </v-toolbar>
 
               <v-card-text>
-                <part-form/>
+                <part-form :song="song" />
               </v-card-text>
             </v-card>
           </v-dialog>
@@ -60,9 +59,11 @@
 </template>
 
 <script>
+  import {Song} from "../../models/Song"
+
   export default {
     data: () => ({
-      songName: '',
+      song: new Song(),
       dialog: false,
       songValid: false,
       nameRules: [
@@ -70,13 +71,13 @@
       ],
     }),
     methods: {
-      addSongName() {
-        this.$store.commit('addSongName', this.songName)
-      },
       saveSong() {
         if(this.$refs.songForm.validate()){
-          if (this.$store.getters.getSong.parts.length === 0)
-            this.$store.commit('openSnackBar', 'Debe agregar partes a la canción presionando el botón AGREGAR PARTE')
+          if (this.song.parts.length === 0)
+            this.$store.commit('openSnackBar', {
+              message: 'Debe agregar partes a la canción presionando el botón AGREGAR PARTE',
+              color: 'error'
+            })
           else {
             this.$store.commit('calculateBpm')
             if (!this.user.uid)

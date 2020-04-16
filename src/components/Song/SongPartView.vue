@@ -38,7 +38,6 @@
     watch:{
       activeTab:function(){
         if (this.tab !== this.activeTab){
-          console.log(this.tab, this.activeTab)
           this.tab = this.activeTab
         }
 
