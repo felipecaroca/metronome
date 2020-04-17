@@ -3,6 +3,7 @@
     <v-form v-model="songValid"  ref="songForm" @submit.prevent="saveSong">
       <v-row>
         <v-col>
+          {{song}}
           <v-text-field v-model="song.name"
                         label="Nombre de la Canción"
                         required
@@ -79,7 +80,7 @@
               color: 'error'
             })
           else {
-            this.$store.commit('calculateBpm')
+            this.song.calculateBpm()
             if (!this.user.uid)
               this.$router.push('/login')
             else
@@ -89,7 +90,7 @@
       },
       closeDialog() {
         this.dialog = false
-        this.$store.commit('calculateBpm')
+        this.song.calculateBpm()
       }
     },
     computed: {

@@ -2,6 +2,7 @@ class Compass {
   constructor() {
     this.tempo = 4
     this.velocity = 120
+    this.current = 0
   }
   // static init(song) {
   //   song.bpm = 60000 / song.compass.velocity

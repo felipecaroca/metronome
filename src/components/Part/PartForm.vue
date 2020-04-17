@@ -19,7 +19,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <song-part-name-view :song="song"/>
+          <song-part-name-view :song="song" @click="setPart"/>
         </v-col>
       </v-row>
       <v-row>
@@ -30,7 +30,6 @@
             <v-icon>mdi-floppy</v-icon>
             Guardar Parte
           </v-btn>
-          {{song}}
         </v-col>
       </v-row>
     </v-form>
@@ -50,6 +49,9 @@
       ]
     }),
     methods: {
+      setPart(part){
+        console.log('implementar esta parte', part)
+      },
       addPart() {
         if (this.$refs.partForm.validate()){
           if (this.part.lines.length > 0) {

@@ -1,7 +1,14 @@
 <template>
   <v-row>
     <v-col>
-      <v-breadcrumbs :items="items" large></v-breadcrumbs>
+      <v-btn v-for="part in song.parts" :key="part.$id"
+             outlined
+             color="primary"
+             class="elevation-0 ma-1"
+             @click="emitPart(part)"
+      >
+        {{part.name}}
+      </v-btn>
     </v-col>
   </v-row>
 </template>
@@ -9,21 +16,10 @@
 <script>
   export default {
     props:['song'],
-    computed:{
-      items(){
-        let tmp = []
-        for (let part in this.song.parts){
-          tmp.push({
-            disabled: true,
-            exact: false,
-            href: '',
-            link: false,
-            text: this.song.parts[part].name,
-            to: ''
-          })
-        }
-        return tmp
+   methods:{
+      emitPart(part){
+        this.$emit('click', part)
       }
-    }
+   }
   }
 </script>
