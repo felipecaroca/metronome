@@ -4,6 +4,10 @@ class Compass {
     this.velocity = 120
     this.current = 0
   }
+
+  isValid(){
+    return this.tempo && this.velocity
+  }
   // static init(song) {
   //   song.bpm = 60000 / song.compass.velocity
   //   song.interval = setInterval(() => {

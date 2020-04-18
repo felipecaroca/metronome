@@ -2,7 +2,8 @@
   <v-container>
     <v-row>
       <v-col cols="2">
-        <compass/>
+        {{compass}}
+        <compass @compass="setCompass" />
         <v-row class="text-center">
           <v-col cols="4" class="text-right">
             <v-btn color="success"
@@ -44,7 +45,13 @@
 <script>
 
   export default {
+    data:()=>({
+      compass: null
+    }),
     methods: {
+      setCompass(compass){
+        this.compass = compass
+      },
       playSequence() {
         this.$store.commit('init')
       },
