@@ -5,6 +5,7 @@
     <app-bar />
     <v-content>
       <router-view/>
+
     </v-content>
     <footer-view/>
   </v-app>
@@ -13,8 +14,6 @@
 <script>
 
   export default {
-    name: 'App',
-
 
   };
 </script>

@@ -54,11 +54,12 @@
   export default {
     methods: {
       setCurrent(song) {
-        this.$store.commit('setSong', song)
-        this.$store.commit('setCurrentCompass', song.compass)
-        this.$store.commit('calculateBpm')
-        this.$forceUpdate()
-        this.$router.push('/player')
+        this.$router.push({
+          name: 'player',
+          params: {
+            song: song
+          }
+        })
       },
       deleteSong(song) {
         this.$store.commit('deleteSong', song)

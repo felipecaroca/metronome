@@ -22,7 +22,7 @@
       >
         <v-card flat>
           <v-card-text>
-            <part-view :part="part" :deletable="false" />
+            <part-view :part="part" :deletable="false" :bpmCounter="bpmCounter" />
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -32,6 +32,7 @@
 
 <script>
   export default {
+    props: ['song'],
     data: () => ({
       tab: null
     }),
@@ -48,11 +49,8 @@
 
     },
     computed: {
-      song(){
-        return this.$store.getters.getSong
-      },
       bpmCounter(){
-        return this.$store.getters.getBpmCounter
+        return this.song.bpmCounter
       },
       parts(){
         this.song.parts.forEach(part=>{

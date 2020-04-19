@@ -2,17 +2,16 @@
   <div>
     <v-form v-model="songValid"  ref="songForm" @submit.prevent="saveSong">
       <v-row>
+        <v-col cols="3">
+          <compass :compass="song.compass" :isRunning="song.running" />
+          <compass-player :song="song" />
+        </v-col>
         <v-col>
-          {{song}}
           <v-text-field v-model="song.name"
                         label="Nombre de la Canción"
                         required
                         :rules="nameRules"
           />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
           <v-btn color="success"
                  @click="saveSong"
           >
@@ -52,10 +51,10 @@
               </v-card-text>
             </v-card>
           </v-dialog>
+          <song-part-view :song="song" />
         </v-col>
       </v-row>
     </v-form>
-
   </div>
 </template>
 
@@ -82,15 +81,20 @@
           else {
             this.song.calculateBpm()
             if (!this.user.uid)
-              this.$router.push('/login')
+
+              this.$router.push('/login', )
             else
-              this.$store.commit('saveSong')
+              this.$store.commit('saveSong', this.song)
           }
         }
       },
       closeDialog() {
         this.dialog = false
         this.song.calculateBpm()
+        this.$store.commit('setSong', this.song)
+      },
+      setCompass(compass){
+        this.song.compass = compass
       }
     },
     computed: {

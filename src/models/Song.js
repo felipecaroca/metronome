@@ -1,14 +1,35 @@
 import {Compass} from "./Compass"
+import {Part} from "./Part";
+import {Chord} from "./Chord";
+import {Line} from "./Line";
 
 class Song{
-  constructor(parts = []) {
-    this.name = ''
+  constructor(song = {}) {
+    this.name = song.name? song.name : ''
     this.interval = null
-    this.parts = parts
-    this.bpmTotal = 0
-    this.compass = new Compass()
-    this.from = null
-    this.to = null
+    this.parts = []
+
+    if (song.parts && song.parts.length > 0){
+      song.parts.forEach(part=>{
+        let lines = []
+        part.lines.forEach(line=>{
+          let chords = []
+          line.chords.forEach(chord=>{
+            let tmp = new  Chord(chord.name, chord.duration)
+            chords.push(tmp)
+          })
+          lines.push(new Line(chords))
+        })
+        this.parts.push(new Part(part.name, lines))
+      })
+    }
+
+    this.bpmTotal = song.bpmTotal
+    this.bpmCounter = 0
+    this.running = false
+    this.compass = new Compass(song.compass)
+
+    this.calculateBpm()
   }
 
   calculateBpm() {

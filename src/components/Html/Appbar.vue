@@ -53,8 +53,15 @@
           <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
       </template>
-
       <v-list>
+        <v-list-item
+            @click="toggleDarkMode"
+        >
+          <v-icon>mdi-brightness-6</v-icon>
+          <v-list-item-title>
+             {{dark? 'Aclarar': 'Oscurecer'}}
+          </v-list-item-title>
+        </v-list-item>
         <v-list-item
             @click="logout"
         >
@@ -67,8 +74,9 @@
 </template>
 
 <script>
-  import logo from "../../assets/logo.png";
-  import firebase from "firebase/app";
+  import logo from "../../assets/logo.png"
+  import firebase from "firebase/app"
+  import {Song} from "../../models/Song"
 
   export default {
     data: () => ({
@@ -78,14 +86,13 @@
       let self = this
       firebase.auth().onAuthStateChanged(function (user) {
         if (user){
-
           let songs = firebase.firestore().collection('users')
             .doc(user.uid).collection('songs')
           songs.onSnapshot(snapshot => {
             console.log('songs')
             let songsList = []
             snapshot.docs.forEach(doc => {
-              songsList.push(doc.data())
+              songsList.push(new Song(doc.data()))
             })
             self.$store.commit('setSongs', songsList)
           }, error => {
@@ -99,6 +106,9 @@
       logout() {
         this.$store.commit('logout')
         this.$forceUpdate()
+      },
+      toggleDarkMode(){
+        this.$vuetify.theme.dark = !this.$vuetify.theme.dark
       }
     },
     computed: {
@@ -107,6 +117,9 @@
       },
       songs() {
         return this.$store.getters.getSongs
+      },
+      dark(){
+        return this.$vuetify.theme.dark
       }
     }
   }

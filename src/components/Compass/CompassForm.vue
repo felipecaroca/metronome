@@ -8,13 +8,13 @@
       </h2>
 
       <v-row justify="center">
-        <v-text-field v-model="compass.tempo"
+        <v-text-field v-model="newCompass.tempo"
                       label="Tiempos"
                       :disabled="isRunning"
         />
       </v-row>
       <v-row>
-        <v-text-field v-model="compass.velocity"
+        <v-text-field v-model="newCompass.velocity"
                       label="Bpm"
                       :disabled="isRunning"
         />
@@ -24,7 +24,7 @@
            cols="6"
 
     >
-      <h1>{{compass.current}}</h1>
+      <h1>{{newCompass.current}}</h1>
 
     </v-col>
   </v-row>
@@ -34,25 +34,13 @@
   import {Compass} from "../../models/Compass"
 
   export default {
+    props: ['compass', 'isRunning'],
     data: () => ({
-      compass: new Compass()
+      newCompass: new Compass()
     }),
-    watch: {
-      tempo: function () {
-        this.$emit('compass', this.compass)
-
-      },
-      velocity: function () {
-        this.$emit('compass', this.compass)
-      }
-    },
-    computed: {
-      tempo() {
-        return this.compass.tempo
-      },
-      velocity() {
-        return this.compass.velocity
-      }
-    }
+   created() {
+      if (this.compass)
+        this.newCompass = this.compass
+   }
   }
 </script>
