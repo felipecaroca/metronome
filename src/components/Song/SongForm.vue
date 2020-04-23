@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-form v-model="songValid"  ref="songForm" @submit.prevent="saveSong">
+    <v-form v-model="songValid" ref="songForm" @submit.prevent="saveSong">
       <v-row>
         <v-col cols="3">
-          <compass :compass="song.compass" :isRunning="song.running" />
-          <compass-player :song="song" />
+          <compass :compass="song.compass" :isRunning="song.running"/>
+          <compass-player :song="song"/>
         </v-col>
         <v-col>
           <v-text-field v-model="song.name"
@@ -14,14 +14,16 @@
           />
           <v-btn color="success"
                  @click="saveSong"
+                 v-if="user.uid"
           >
             <v-icon>mdi-floppy</v-icon>
             Guardar
           </v-btn>
           <v-dialog
-              v-model="dialog"
+              v-model="partDialog"
               fullscreen hide-overlay
               transition="dialog-bottom-transition"
+              :persistent="true"
 
           >
             <template v-slot:activator="{ on }">
@@ -45,13 +47,12 @@
                 <v-toolbar-title>Parte de la Canción</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
-
               <v-card-text>
-                <part-form :song="song" />
+                <part-form :song="song"/>
               </v-card-text>
             </v-card>
           </v-dialog>
-          <song-part-view :song="song" />
+          <song-part-view :song="song"/>
         </v-col>
       </v-row>
     </v-form>
@@ -64,7 +65,7 @@
   export default {
     data: () => ({
       song: new Song(),
-      dialog: false,
+      partDialog: false,
       songValid: false,
       nameRules: [
         v => !!v || 'Nombre de la canción es Requerido',
@@ -72,7 +73,7 @@
     }),
     methods: {
       saveSong() {
-        if(this.$refs.songForm.validate()){
+        if (this.$refs.songForm.validate()) {
           if (this.song.parts.length === 0)
             this.$store.commit('openSnackBar', {
               message: 'Debe agregar partes a la canción presionando el botón AGREGAR PARTE',
@@ -80,21 +81,17 @@
             })
           else {
             this.song.calculateBpm()
-            if (!this.user.uid)
-
-              this.$router.push('/login', )
+            if (!this.user.uid){
+              this.$router.push({name: 'login'})
+            }
             else
               this.$store.commit('saveSong', this.song)
           }
         }
       },
       closeDialog() {
-        this.dialog = false
+        this.partDialog = false
         this.song.calculateBpm()
-        this.$store.commit('setSong', this.song)
-      },
-      setCompass(compass){
-        this.song.compass = compass
       }
     },
     computed: {

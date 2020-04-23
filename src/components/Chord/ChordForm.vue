@@ -18,28 +18,35 @@
           />
         </v-col>
         <v-col>
-          <v-btn fab
-                 small
-                 @click="addChord"
+          <v-btn @click="addChord"
                  class="ma-1"
           >
             <v-icon>mdi-plus</v-icon>
+            Agregar Acorde
           </v-btn>
-          <v-btn fab
-                 small
-                 color="success"
+          <v-btn color="success"
                  class="ma-1"
                  @click="saveLine"
+                 v-if="notes.length > 0"
           >
             <v-icon>mdi-floppy</v-icon>
+            Agregar Línea
           </v-btn>
         </v-col>
         <v-col>
-          <part-line-view :notes="storedNotes" v-for="storedNotes in storedLines"
-                          @removeChord="removeStoredChord"
-                          :key="storedNotes.$id"
-                          :deletable="true"
-          />
+          <v-card v-if="storedLines && storedLines.length > 0" class="elevation-6">
+            <v-card-title>
+              Acordes de la Parte
+            </v-card-title>
+            <v-card-text>
+              <part-line-view :notes="storedNotes" v-for="storedNotes in storedLines"
+                              @removeChord="removeStoredChord"
+                              :key="storedNotes.$id"
+                              :deletable="true"
+              />
+            </v-card-text>
+          </v-card>
+
         </v-col>
       </v-row>
     </v-form>

@@ -4,24 +4,21 @@ import {snackBarModule} from "./snackbar"
 
 const songModule = {
   state:{
-    song: {},
     songs: []
   },
   mutations:{
-    setSong(state, song){
-      state.song = song
-    },
     setSongs(state, songs){
       state.songs = songs
     },
     saveSong(state, song) {
       loadingModule.mutations.setLoading(loadingModule.state, true)
       let saveSong = firebase.functions().httpsCallable('song')
-      saveSong(song).then((res) => {
-        console.log(res)
+      saveSong(song).then(() => {
+        snackBarModule.mutations.openSnackBar(snackBarModule.state, {
+          color: 'success',
+          message: 'Guardado exitoso'
+        })
       }).catch(err => {
-        console.log('error', err.details)
-
         snackBarModule.mutations.openSnackBar(snackBarModule.state, {
           color: 'error',
           message: err.message
@@ -32,10 +29,12 @@ const songModule = {
       loadingModule.mutations.setLoading(loadingModule.state, true)
       let deleteSong = firebase.functions().httpsCallable('deleteSong')
 
-      deleteSong(song).then((res) => {
-        console.log(res)
+      deleteSong(song).then(() => {
+        snackBarModule.mutations.openSnackBar(snackBarModule.state,{
+          color: 'success',
+          message: 'Eliminado exitoso'
+        })
       }).catch(err => {
-        console.log('error', err.details)
         snackBarModule.mutations.openSnackBar(snackBarModule.state, {
           color: 'error',
           message: err.message

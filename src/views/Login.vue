@@ -13,6 +13,7 @@
   export default {
     data() {
       return {
+        song: {},
         ui: null,
         uiConfig: {
           callbacks: {
@@ -24,7 +25,7 @@
             //    // Hide the loader.
             // }
           },
-          //signInFlow: 'popup',
+          signInFlow: 'popup',
           signInSuccessUrl: '/',
           signInOptions: [
             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -42,7 +43,7 @@
     },
     mounted() {
       this.ui = firebaseUi.auth.AuthUI.getInstance() || new firebaseUi.auth.AuthUI(firebase.auth());
-      this.ui.start('#firebaseui-auth-container', this.uiConfig);
+      this.ui.start('#firebaseui-auth-container', this.uiConfig)
     }
   }
 </script>

@@ -98,8 +98,9 @@
           }, error => {
             console.log(error)
           })
+        } else{
+          self.$store.commit('setSongs', [])
         }
-
       })
     },
     methods: {

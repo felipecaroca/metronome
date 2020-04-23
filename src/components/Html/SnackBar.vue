@@ -3,11 +3,12 @@
     <v-snackbar
         :color="snackbar.color"
         v-model="snackbar.visible"
+        @submit.prevent="closeSnackBar"
     >
       {{ snackbar.message }}
       <v-btn
           text
-          @click="closeSnackBar"
+          @click.prevent="closeSnackBar"
       >
         Cerrar
       </v-btn>
