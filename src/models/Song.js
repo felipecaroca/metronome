@@ -5,6 +5,7 @@ import {Line} from "./Line";
 
 class Song{
   constructor(song = {}) {
+    this.id = ''
     this.name = song.name? song.name : ''
     this.interval = null
     this.parts = []

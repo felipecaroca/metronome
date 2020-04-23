@@ -11,6 +11,8 @@
             :dark="checkActive(note)"
             :color="checkColor(note)">
       {{note.name}}
+      <v-spacer/>
+      {{setCurrent(note)}}/{{note.duration}}
       <v-btn color="error"
              x-small
              @click="removeChord(note, notes)"
@@ -32,6 +34,13 @@
       },
       checkActive(note) {
         return this.bpmCounter >= note.from && this.bpmCounter <= note.to && this.bpmCounter !== 0
+      },
+      setCurrent(note) {
+        if (this.checkActive(note))
+          return  this.bpmCounter - (note.from - 1)
+        else if (this.bpmCounter > note.to)
+          return  note.duration
+        return 0
       },
       checkColor(note) {
         return this.checkActive(note) ? 'success' : ''

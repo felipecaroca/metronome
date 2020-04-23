@@ -12,7 +12,8 @@ const songModule = {
     },
     saveSong(state, song) {
       loadingModule.mutations.setLoading(loadingModule.state, true)
-      let saveSong = firebase.functions().httpsCallable('song')
+      let saveSong = song.id ? firebase.functions().httpsCallable('updateSong') :
+                                firebase.functions().httpsCallable('addSong')
       saveSong(song).then(() => {
         snackBarModule.mutations.openSnackBar(snackBarModule.state, {
           color: 'success',

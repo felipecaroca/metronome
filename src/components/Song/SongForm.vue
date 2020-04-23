@@ -71,6 +71,10 @@
         v => !!v || 'Nombre de la canción es Requerido',
       ],
     }),
+    created() {
+      if (this.$route.params.song)
+        this.song = this.$route.params.song
+    },
     methods: {
       saveSong() {
         if (this.$refs.songForm.validate()) {

@@ -39,6 +39,21 @@
               <span>Reproducir Canción</span>
             </v-tooltip>
 
+            <v-tooltip top>
+              <template v-slot:activator="{on}">
+                <v-btn fab
+                       class="ma-1"
+                       small
+                       @click="goEdit(item)"
+                       color="primary"
+                       v-on="on"
+                >
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+              </template>
+              <span>Editar Canción</span>
+            </v-tooltip>
+
             <v-tooltip right>
               <template v-slot:activator="{ on }">
                 <v-btn fab
@@ -52,7 +67,7 @@
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </template>
-              <span>ELiminar Canción</span>
+              <span>Eliminar Canción</span>
             </v-tooltip>
 
           </td>
@@ -77,6 +92,14 @@
       },
       deleteSong(song) {
         this.$store.commit('deleteSong', song)
+      },
+      goEdit(song){
+        this.$router.push({
+          name: 'home',
+          params: {
+            song: song
+          }
+        })
       }
     },
     computed: {

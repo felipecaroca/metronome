@@ -91,7 +91,10 @@
           songs.onSnapshot(snapshot => {
             let songsList = []
             snapshot.docs.forEach(doc => {
-              songsList.push(new Song(doc.data()))
+              let song = new Song(doc.data())
+              song.id = doc.id
+              songsList.push(song)
+
             })
             self.$store.commit('setSongs', songsList)
           }, () => {

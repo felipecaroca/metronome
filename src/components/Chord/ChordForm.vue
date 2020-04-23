@@ -36,7 +36,7 @@
         <v-col>
           <v-card v-if="storedLines && storedLines.length > 0" class="elevation-6">
             <v-card-title>
-              Acordes de la Parte
+              Acordes de la Parte {{part.name}}
             </v-card-title>
             <v-card-text>
               <part-line-view :notes="storedNotes" v-for="storedNotes in storedLines"
