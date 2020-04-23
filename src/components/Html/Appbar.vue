@@ -89,14 +89,13 @@
           let songs = firebase.firestore().collection('users')
             .doc(user.uid).collection('songs')
           songs.onSnapshot(snapshot => {
-            console.log('songs')
             let songsList = []
             snapshot.docs.forEach(doc => {
               songsList.push(new Song(doc.data()))
             })
             self.$store.commit('setSongs', songsList)
-          }, error => {
-            console.log(error)
+          }, () => {
+
           })
         } else{
           self.$store.commit('setSongs', [])
