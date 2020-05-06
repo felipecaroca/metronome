@@ -25,6 +25,10 @@
       Mis Canciones
       <v-icon>mdi-music</v-icon>
     </v-btn>
+    <v-btn class="elevation-0 transparent" to="/about">
+      <v-icon>mdi-info</v-icon>
+      Acerca de...
+    </v-btn>
     <v-spacer/>
     <v-list class="transparent" v-if="user">
       <v-list-item>
@@ -61,6 +65,10 @@
           <v-list-item-title>
              {{dark? 'Aclarar': 'Oscurecer'}}
           </v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/user_manual">
+          <v-icon>mdi-file</v-icon>
+          <v-list-item-title>Manual de Uso</v-list-item-title>
         </v-list-item>
         <v-list-item
             @click="logout"

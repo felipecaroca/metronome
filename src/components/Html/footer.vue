@@ -16,6 +16,9 @@
         </div>
         <router-link to="/privacy">Politica de Privacidad</router-link> |
         <router-link to="/service">Condiciones del Servicio</router-link>
+        <div>
+          <router-link to="/user_manual">Manual de Uso</router-link>
+        </div>
       </v-col>
     </v-row>
   </v-footer>
